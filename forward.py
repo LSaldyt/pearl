@@ -4,19 +4,17 @@ from time import sleep
 
 SERIAL_PORT = '/dev/ttyUSB0'
 IDS = list(range(1, 11))
+IDS = list(range(1, 7))
 
 controller = lewansoul_lx16a.ServoController(
     serial.Serial(SERIAL_PORT, 115200, timeout=1),
 )
 
 servos = [controller.servo(i) for i in IDS]
+print(servos)
 
-for servo in servos:
-    print(servo)
-    servo.move(500)
+for control in [0, 1000, 0, 500, 0, 1000]:
+    for servo in servos:
+        servo.move_prepare(control)
+    controller.move_start()
     sleep(1)
- 
-for servo in servos:
-    servo.move_prepare(0)
-
-controller.move_start()
